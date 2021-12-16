@@ -1,0 +1,21 @@
+﻿@model PokemonFun.Models.PokemonModel
+@{
+    ViewData["Title"] = "GetRandomPokemon";
+}
+<h2>That is your pokemon! Catch it!</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>    
+    </dl>
+    <img src=@ViewData.Model.sprites.front_default style="width:200px; height:200px;" />
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
