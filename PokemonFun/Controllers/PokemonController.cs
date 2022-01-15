@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using X.PagedList;
 using static PokemonFun.Models.SimplePokemonData;
 
 namespace PokemonFun.Controllers
@@ -25,18 +26,21 @@ namespace PokemonFun.Controllers
         }        
 
         [HttpGet()]
-        public async Task<IActionResult> Index(string searchPokemon)
+        public async Task<IActionResult> Index(string searchPokemon, int? page)
         {
             ViewBag.searchPokemon = searchPokemon;
+            int pageSize = (int)PageSize.PageSize;
+            int pageNumber = (page ?? 1);
             IEnumerable<PokemonModel> pokemonModelList = await _pokeapiService.GetPokemonList();
+            var PaginatedPokemonList = pokemonModelList.ToPagedList(pageNumber, pageSize);
             List<PokemonModel> pokemons = new List<PokemonModel>();
 
             if (!String.IsNullOrEmpty(searchPokemon))
             {
-                pokemonModelList = pokemonModelList.Where(p => p.Name.ToUpper().Contains(searchPokemon.ToUpper())).ToList();
-                return View(pokemonModelList);
+                PaginatedPokemonList = PaginatedPokemonList.Where(p => p.Name.ToUpper().Contains(searchPokemon.ToUpper())).ToPagedList();
+                return View(PaginatedPokemonList);
             }
-            return View(pokemonModelList);
+            return View(PaginatedPokemonList);
         }
         [Route("random")]
         public async Task<ActionResult<PokemonModel>> GetRandomPokemon()
