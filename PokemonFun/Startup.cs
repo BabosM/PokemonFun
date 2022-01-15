@@ -24,10 +24,14 @@ namespace PokemonFun
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var uri = Configuration.GetValue<string>("HttpPokemonApi");
             services.AddControllersWithViews();
             services.AddHttpClient();
             services.AddScoped<IPokeapiService, PokeapiService>();
-            services.AddHttpClient<PokeapiService>();
+            services.AddHttpClient("PokemonApi", c => 
+            {
+                c.BaseAddress = new Uri(uri);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
