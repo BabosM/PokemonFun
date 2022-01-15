@@ -37,7 +37,7 @@ namespace PokemonFun.Service
             List<PokemonRoot> PokemonRootList = await GetPokemonRootList();
             List<PokemonModel> PokemonModelList = new List<PokemonModel>();
   
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 var response = await _httpClient.GetAsync(PokemonRootList[i].url);
                 response.EnsureSuccessStatusCode();

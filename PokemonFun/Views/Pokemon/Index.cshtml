@@ -1,6 +1,8 @@
-﻿@model List<PokemonFun.Models.PokemonModel>
-
-@{ 
+﻿@using X.PagedList.Mvc
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model X.PagedList.IPagedList<PokemonFun.Models.PokemonModel>
+@{
     ViewBag.Title = "Index";
 }
 <div class="container p-3">
@@ -20,6 +22,11 @@
                 </p>
             }
         </form>
+        <div class="col-6" >
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",
+           new { page, sortOrder = ViewBag.CurrentSort, curretFilter = ViewBag.CurrentFilter }))
+            Page: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        </div>
     </div>
     <br />
     @if (Model.Count() > 0)
@@ -41,7 +48,7 @@
                 {
                     <tr>
                         <td width="25%">@pokemon.Name</td>
-                        <td width="25%"> <img src="@pokemon.sprites.front_default" style="width:100px; height:100px;" /></td>                   
+                        <td width="25%"> <img src="@pokemon.sprites.front_default" style="width:100px; height:100px;" /></td>
                     </tr>
                 }
             </tbody>
