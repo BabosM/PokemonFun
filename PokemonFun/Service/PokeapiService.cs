@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using PokemonFun.Models;
 using System;
 using System.Collections;
@@ -14,13 +15,15 @@ namespace PokemonFun.Service
 {
     public class PokeapiService : IPokeapiService
     {
-        private static HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public PokeapiService(HttpClient httpClient)
+        public PokeapiService(IHttpClientFactory clientFactory)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+            _clientFactory = clientFactory;    
+            _httpClient = _clientFactory.CreateClient("PokemonApi");
             _httpClient.DefaultRequestHeaders.Clear();
+            
         }
 
         public async Task<List<PokemonRoot>> GetPokemonRootList() {
@@ -60,6 +63,11 @@ namespace PokemonFun.Service
         public async Task<PokemonModel> GetRandomPokemon()
         {
             var random = new Random();
+            // pobrac counta z pokeomonow
+            // z counta zrobic random
+            // dokleic random do sciezki 
+            // 
+            var response = await _httpClient.GetAsync("pokemon/" + random);
             List<PokemonModel> PokemonRootList = new List<PokemonModel>();
             PokemonRootList = await GetPokemonList();
             int index = random.Next(PokemonRootList.Count);
